@@ -115,19 +115,18 @@
         </form>
     </div>
     <!-- Main Content End -->
-
-    <?php
+<?php
 
         if(isset($_POST['submit']))
         {
             //Get All the Values from Form
-            $full_name = $_POST['full_name']; 
+            $full_name = mysqli_real_escape_string($conn, $_POST['full_name']); 
             $date = date('y-m-d',strtotime($_POST['date']));
-            $email = $_POST['email'];
-            $source = $_POST['source'];
-            $campaign_id = $_POST['campaign_id'];
-            $contact = $_POST['contact'];  
-            $status = $_POST['status'];  
+            $email = mysqli_real_escape_string($conn, $_POST['email']);
+            $source = mysqli_real_escape_string($conn, $_POST['source']);
+            $campaign_id = mysqli_real_escape_string($conn, $_POST['campaign_id']);
+            $contact = mysqli_real_escape_string($conn, $_POST['contact']);  
+            $status = mysqli_real_escape_string($conn, $_POST['status']);  
 
 
             //Update the Values
@@ -139,7 +138,6 @@
             status= '$status',
             source= '$source',
             campaign_id= '$campaign_id'
-
             WHERE id=$id
             ";
 
@@ -162,6 +160,9 @@
         }
 
     ?>
+
+
+
 
 <?php include('../common/footer.php'); ?> 
 
