@@ -119,7 +119,7 @@
     <!-- Main Content End -->
 
 <?php include('../common/footer.php'); ?> 
-
+<?php
 if(isset($_POST['submit'])) //Whether the submit value is passed
 {
     $full_name = $_POST['full_name'];   //Get Values from form
@@ -149,3 +149,4 @@ if(isset($_POST['submit'])) //Whether the submit value is passed
         echo "<script>window.location.href='http://localhost/tritech-crm/user-home/manage-lead.php'; </script>"; 
     }  
 }
+?>
