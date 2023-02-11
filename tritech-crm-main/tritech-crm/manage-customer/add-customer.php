@@ -57,37 +57,27 @@
 
 <?php include('../common/footer.php'); ?> 
 
-<?php 
+<?php
+    include('../config/constants.php');
 
-    if(isset($_POST['submit'])) //whether the submit value is passed
-    {
-        $full_name = $_POST['full_name']; //Get Values from form
-        $reg_date = date('y-m-d',strtotime($_POST['reg_date']));
+    if(isset($_POST['submit'])) {
+        $full_name = $_POST['full_name'];
+        $reg_date = date('y-m-d', strtotime($_POST['reg_date']));
         $contact = $_POST['contact'];
         $email = $_POST['email'];
-        $address = $_POST['address'];          
+        $address = $_POST['address'];
 
-        $sql = "INSERT INTO tbl_customer SET
-            full_name = '$full_name',
-            reg_date = '$reg_date',
-            contact= '$contact',
-            address='$address',
-            email='$email'
-        ";
+        $sql = "INSERT INTO tbl_customer (full_name, reg_date, contact, address, email) VALUES (?, ?, ?, ?, ?)";
+        $stmt = mysqli_prepare($conn, $sql);
+        mysqli_stmt_bind_param($stmt, "sssss", $full_name, $reg_date, $contact, $address, $email);
+        mysqli_stmt_execute($stmt);
         
-        $res = mysqli_query($conn, $sql) or die(mysqli_error($conn)); //execute query
-
-        if($res==TRUE)
-        {
+        if(mysqli_stmt_affected_rows($stmt) == 1) {
             $_SESSION['add'] = "<div class='alert-success'> Customer Successfully Added </div>";
-            header('location: http://localhost/tritech-crm/manage-customer/manage-customer.php'); 
-        }
-        else
-        {
+            header('location: http://localhost/tritech-crm/manage-customer/manage-customer.php');
+        } else {
             $_SESSION['add'] = "<div class='alert-failed'>Failed to Add Customer </div> ";
-            header('location: http://localhost/tritech-crm/manage-customer/manage-customer.php'); 
-        }  
+            header('location: http://localhost/tritech-crm/manage-customer/manage-customer.php');
+        }
     }
-
-
 ?>
