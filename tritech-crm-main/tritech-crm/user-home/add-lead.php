@@ -120,41 +120,32 @@
 
 <?php include('../common/footer.php'); ?> 
 
-<?php 
+if(isset($_POST['submit'])) //Whether the submit value is passed
+{
+    $full_name = $_POST['full_name'];   //Get Values from form
+    $date = date('y-m-d',strtotime($_POST['date']));
+    $email = $_POST['email'];
+    $source = $_POST['source'];
+    $campaign_id = $_POST['campaign_id'];
+    $contact = $_POST['contact'];  
+    $status = $_POST['status'];       
 
-    if(isset($_POST['submit'])) //Whether the submit value is passed
+    $sql = "INSERT INTO tbl_lead (full_name, email, contact, date, status, source, campaign_id) VALUES (?,?,?,?,?,?,?)";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "sssssss", $full_name, $email, $contact, $date, $status, $source, $campaign_id);
+
+    $res = mysqli_stmt_execute($stmt) or die(mysqli_error($conn)); //Execute query
+
+    if($res==TRUE)
     {
-        $full_name = $_POST['full_name'];   //Get Values from form
-        $date = date('y-m-d',strtotime($_POST['date']));
-        $email = $_POST['email'];
-        $source = $_POST['source'];
-        $campaign_id = $_POST['campaign_id'];
-        $contact = $_POST['contact'];  
-        $status = $_POST['status'];       
-
-        $sql = "INSERT INTO tbl_lead SET
-            full_name = '$full_name',
-            email = '$email',
-            contact='$contact',
-            date = '$date',
-            status= '$status',
-            source= '$source',
-            campaign_id= '$campaign_id' 
-        ";
-        
-        $res = mysqli_query($conn, $sql) or die(mysqli_error($conn)); //Execute query
-
-        if($res==TRUE)
-        {
-            $_SESSION['add'] = "<div class='alert-success'> Lead Successfully Added </div>";
-            header('location: http://localhost/tritech-crm/user-home/manage-lead.php'); 
-            echo "<script>window.location.href='http://localhost/tritech-crm/user-home/manage-lead.php'; </script>";
-        }
-        else
-        {
-            $_SESSION['add'] = "<div class='alert-failed'>Failed to Add Lead </div> ";
-            header('location: http://localhost/tritech-crm/user-home/manage-lead.php');
-            echo "<script>window.location.href='http://localhost/tritech-crm/user-home/manage-lead.php'; </script>"; 
-        }  
+        $_SESSION['add'] = "<div class='alert-success'> Lead Successfully Added </div>";
+        header('location: http://localhost/tritech-crm/user-home/manage-lead.php'); 
+        echo "<script>window.location.href='http://localhost/tritech-crm/user-home/manage-lead.php'; </script>";
     }
-?>
+    else
+    {
+        $_SESSION['add'] = "<div class='alert-failed'>Failed to Add Lead </div> ";
+        header('location: http://localhost/tritech-crm/user-home/manage-lead.php');
+        echo "<script>window.location.href='http://localhost/tritech-crm/user-home/manage-lead.php'; </script>"; 
+    }  
+}
