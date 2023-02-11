@@ -23,32 +23,29 @@
     </div>
         <div class="main-content">
         <?php
-            $id=$_GET['id'];
+            $id = intval($_GET['id']);
 
-            $sql = "SELECT * FROM tbl_customer WHERE id=$id";
+            $sql = "SELECT * FROM tbl_customer WHERE id = ?";
 
-            $res = mysqli_query($conn, $sql);
+            $stmt = mysqli_prepare($conn, $sql);
+            mysqli_stmt_bind_param($stmt, "i", $id);
+            mysqli_stmt_execute($stmt);
+            $res = mysqli_stmt_get_result($stmt);
 
-            if($res==TRUE)
-            {
+            if ($res) {
                 $count = mysqli_num_rows($res);
-                if($count==1)
-                {
-                    $row=mysqli_fetch_assoc($res);
+                if ($count == 1) {
+                    $row = mysqli_fetch_assoc($res);
 
                     $full_name = $row['full_name'];
                     $contact = $row['contact'];
                     $email = $row['email'];
-                    $reg_date=$row['reg_date'];
-                    $address=$row['address'];
-                }   
-                else
-                {
+                    $reg_date = $row['reg_date'];
+                    $address = $row['address'];
+                } else {
                     header('location: http://localhost/tritech-crm/user-home/user-customer.php');
-                }                 
-            } 
-            
-            
+                }
+            }
         ?>
 
 
