@@ -64,30 +64,32 @@
 if(isset($_POST['submit']))
 {
     $id = mysqli_real_escape_string($conn, $_POST['id']);
-    $current_password = md5(mysqli_real_escape_string($conn, $_POST['current_password']));
-    $new_password = md5(mysqli_real_escape_string($conn, $_POST['new_password']));
-    $confirm_password = md5(mysqli_real_escape_string($conn, $_POST['confirm_password']));
+    $current_password = mysqli_real_escape_string($conn, $_POST['current_password']);
+    $new_password = mysqli_real_escape_string($conn, $_POST['new_password']);
+    $confirm_password = mysqli_real_escape_string($conn, $_POST['confirm_password']);
 
-    $sql = "SELECT * FROM tbl_admin WHERE id='$id' AND password='$current_password'";
+    $sql = "SELECT password FROM tbl_admin WHERE id='$id'";
     $res = mysqli_query($conn, $sql);
 
-    if($res==true)
+    if($res)
     {
-        $count=mysqli_num_rows($res);
+        $user = mysqli_fetch_assoc($res);
 
-        if($count==1)
+        if(password_verify($current_password, $user['password']))
         {
 
-            if($new_password==$confirm_password)
+            if($new_password == $confirm_password)
             {
+                $new_password_hashed = password_hash($new_password, PASSWORD_BCRYPT);
+
                 $sql2 = "UPDATE tbl_admin SET 
-                    password='$new_password' 
+                    password='$new_password_hashed' 
                     WHERE id='$id'
                 ";
 
                 $res2 = mysqli_query($conn, $sql2);
 
-                if($res2==true)
+                if($res2)
                 {
 
                     $_SESSION['change-pwd'] = "<div class='alert-success'>Password Changed Successfully. </div>";
@@ -114,7 +116,8 @@ if(isset($_POST['submit']))
         {
             $_SESSION['user-not-found'] = "<div class='alert-failed'>Current Password is entered incorrectly</div>";
             header('location: http://localhost/tritech-crm/manage-admin/manage-admin.php');
-            echo "<script>window.location.href='http://localhost/tritech-crm/manage-admin/manage-admin.php'; </script>"; 
+            echo "<script>window.location.href='http://localhost/tritech-crm
+
         }
     }
 
