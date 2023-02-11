@@ -68,35 +68,29 @@
 
 <?php 
 
-    if(isset($_POST['submit'])) //whether the submit value is passed
-    {
-        $camp_name = $_POST['camp_name']; //Get Values from form
-        $start_date = date('y-m-d',strtotime($_POST['start_date']));
-        $end_date = date('y-m-d',strtotime($_POST['end_date']));
-        $budget = $_POST['budget'];
-        $type = $_POST['type'];         
-
-        $sql = "INSERT INTO tbl_campaign SET
-            camp_name = '$camp_name',
-            start_date = '$start_date',
-            end_date = '$end_date',
-            budget= '$budget',
-            type='$type'
-        ";
-        
-        $res = mysqli_query($conn, $sql) or die(mysqli_error($conn)); //execute query
-
-        if($res==TRUE)
-        {
-            $_SESSION['add'] = "<div class='alert-success'>Campaign Successfully Added </div>";
-            header('location: http://localhost/tritech-crm/manage-campaign/manage-campaign.php'); 
-        }
-        else
-        {
-            $_SESSION['add'] = "<div class='alert-failed'>Failed to Add Campaign </div> ";
-            header('location: http://localhost/tritech-crm/manage-campaign/add-campaign.php'); 
-        }  
+   if(isset($_POST['submit'])) {
+    $camp_name = $_POST['camp_name'];
+    $start_date = date('y-m-d',strtotime($_POST['start_date']));
+    $end_date = date('y-m-d',strtotime($_POST['end_date']));
+    $budget = $_POST['budget'];
+    $type = $_POST['type'];
+    
+    $sql = "INSERT INTO tbl_campaign (camp_name, start_date, end_date, budget, type) 
+            VALUES (?, ?, ?, ?, ?)";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "sssds", $camp_name, $start_date, $end_date, $budget, $type);
+    mysqli_stmt_execute($stmt);
+    
+    if (mysqli_stmt_affected_rows($stmt) > 0) {
+        $_SESSION['add'] = "<div class='alert-success'>Campaign Successfully Added </div>";
+        header('location: http://localhost/tritech-crm/manage-campaign/manage-campaign.php');
+    } else {
+        $_SESSION['add'] = "<div class='alert-failed'>Failed to Add Campaign </div> ";
+        header('location: http://localhost/tritech-crm/manage-campaign/add-campaign.php');
     }
+    mysqli_stmt_close($stmt);
+}
+
 
 
 ?>
