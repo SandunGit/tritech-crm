@@ -84,43 +84,39 @@
     </div>
     <!-- Main Content End -->
 
-    <?php
+<?php
 
-        if(isset($_POST['submit']))
-        {   
-            $id = $_POST['id'];         //Get Values from form
-            $full_name = $_POST['full_name']; 
-            $reg_date = date('y-m-d',strtotime($_POST['reg_date']));
-            $contact = $_POST['contact'];
-            $email = $_POST['email'];
-            $address = $_POST['address'];  
+if (isset($_POST['submit'])) {
+    $id = $_POST['id'];         //Get Values from form
+    $full_name = $_POST['full_name']; 
+    $reg_date = date('y-m-d', strtotime($_POST['reg_date']));
+    $contact = $_POST['contact'];
+    $email = $_POST['email'];
+    $address = $_POST['address'];  
 
-            $sql2 = "UPDATE tbl_customer SET
-            full_name = '$full_name',
-            reg_date = '$reg_date',
-            contact= '$contact',
-            address='$address',
-            email='$email'
-
-            WHERE id = $id
+    $sql2 = "UPDATE tbl_customer SET
+            full_name = ?,
+            reg_date = ?,
+            contact= ?,
+            address= ?,
+            email= ?
+            WHERE id = ?
             ";
 
-            $res2 = mysqli_query($conn,$sql2);
-            if($res2 == TRUE)
-            {
-                $_SESSION ['update'] = "<div class='alert-success'>Customer Updated Successfully</div>";
-                header('location: http://localhost/tritech-crm/user-home/user-customer.php');
-            }
-            else
-            {
-                $_SESSION['update'] = "<div class='alert-failed'>Failed to Update Customer </div> ";
-                header('location: http://localhost/tritech-crm/user-home/user-customer.php'); 
-            }
+    $stmt = mysqli_prepare($conn, $sql2);
+    mysqli_stmt_bind_param($stmt, "sssssi", $full_name, $reg_date, $contact, $address, $email, $id);
+    $res2 = mysqli_stmt_execute($stmt);
+    if ($res2 == TRUE) {
+        $_SESSION['update'] = "<div class='alert-success'>Customer Updated Successfully</div>";
+        header('location: http://localhost/tritech-crm/user-home/user-customer.php');
+    } else {
+        $_SESSION['update'] = "<div class='alert-failed'>Failed to Update Customer </div> ";
+        header('location: http://localhost/tritech-crm/user-home/user-customer.php'); 
+    }
+}
 
+?>
 
-        }
-
-    ?>
 
 <?php include('../common/footer.php'); ?> 
 
