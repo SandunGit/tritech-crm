@@ -119,52 +119,48 @@
     </div>
     <!-- Main Content End -->
 
-    <?php
+ <?php
+    if(isset($_POST['submit']))
+    {
+        $full_name = $_POST['full_name']; 
+        $date = date('y-m-d',strtotime($_POST['date']));
+        $email = $_POST['email'];
+        $source = $_POST['source'];
+        $campaign_id = $_POST['campaign_id'];
+        $contact = $_POST['contact'];  
+        $status = $_POST['status'];  
 
-        if(isset($_POST['submit']))
+        $sql2 = "UPDATE tbl_lead SET
+            full_name = ?,
+            email = ?,
+            contact = ?,
+            date = ?,
+            status = ?,
+            source = ?,
+            campaign_id = ?
+        WHERE id = ?";
+
+        $stmt = mysqli_prepare($conn, $sql2);
+        mysqli_stmt_bind_param($stmt, "sssssssi", $full_name, $email, $contact, $date, $status, $source, $campaign_id, $id);
+
+        $res2 = mysqli_stmt_execute($stmt);
+
+        if($res2 == TRUE)
         {
-            //Get All the Values from Form
-            $full_name = $_POST['full_name']; 
-            $date = date('y-m-d',strtotime($_POST['date']));
-            $email = $_POST['email'];
-            $source = $_POST['source'];
-            $campaign_id = $_POST['campaign_id'];
-            $contact = $_POST['contact'];  
-            $status = $_POST['status'];  
-
-
-            //Update the Values
-            $sql2 = "UPDATE tbl_lead SET
-            full_name = '$full_name',
-            email = '$email',
-            contact='$contact',
-            date = '$date',
-            status= '$status',
-            source= '$source',
-            campaign_id= '$campaign_id'
-
-            WHERE id=$id
-            ";
-
-            $res2 = mysqli_query($conn,$sql2);
-
-            if($res2 == TRUE)
-            {
-                $_SESSION ['update'] = "<div class='alert-success'>Lead Updated Successfully</div>";
-                header('location: http://localhost/tritech-crm/user-home/manage-lead.php');
-                echo "<script>window.location.href='http://localhost/tritech-crm/user-home/manage-lead.php'; </script>";
-            }
-            else
-            {
-                $_SESSION['update'] = "<div class='alert-failed'>Failed to Update Lead </div> ";
-                header('location: http://localhost/tritech-crm/user-home/manage-lead.php');
-                echo "<script>window.location.href='http://localhost/tritech-crm/user-home/manage-lead.php'; </script>"; 
-            }
-
-
+            $_SESSION ['update'] = "<div class='alert-success'>Lead Updated Successfully</div>";
+            header('location: http://localhost/tritech-crm/user-home/manage-lead.php');
+            echo "<script>window.location.href='http://localhost/tritech-crm/user-home/manage-lead.php'; </script>";
+        }
+        else
+        {
+            $_SESSION['update'] = "<div class='alert-failed'>Failed to Update Lead </div> ";
+            header('location: http://localhost/tritech-crm/user-home/manage-lead.php');
+            echo "<script>window.location.href='http://localhost/tritech-crm/user-home/manage-lead.php'; </script>"; 
         }
 
-    ?>
+    }
+
+?>
 
 <?php include('../common/footer.php'); ?> 
 
