@@ -22,34 +22,28 @@
     <!-- Main Content Start -->
     <div class="main-content">
         <?php
-            $id=$_GET['id'];
+    $id = intval($_GET['id']);
 
-            $sql = "SELECT * FROM tbl_lead WHERE id=$id";
+    $stmt = $conn->prepare("SELECT * FROM tbl_lead WHERE id=?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-            $res = mysqli_query($conn, $sql);
-
-            if($res==TRUE)
-            {
-                $count = mysqli_num_rows($res);
-                if($count==1)
-                {   
-                    $rows=mysqli_fetch_assoc($res);
-                    
-                    $id=$rows['id'];
-                    $full_name=$rows['full_name'];
-                    $contact=$rows['contact'];
-                    $status=$rows['status'];
-                    $email=$rows['email'];
-                    $campaign_id=$rows['campaign_id'];
-                    $source=$rows['source'];
-                    $date=$rows['date'];
-                }   
-                else
-                {
-                    header('location: http://localhost/tritech-crm/manage-lead/manage-lead.php');
-                }                 
-            }  
-            ?>
+    if($result->num_rows == 1) {
+        $rows = $result->fetch_assoc();
+        
+        $id = $rows['id'];
+        $full_name = $rows['full_name'];
+        $contact = $rows['contact'];
+        $status = $rows['status'];
+        $email = $rows['email'];
+        $campaign_id = $rows['campaign_id'];
+        $source = $rows['source'];
+        $date = $rows['date'];
+    } else {
+        header('location: http://localhost/tritech-crm/manage-lead/manage-lead.php');
+    }
+?>
 
 
         <form action="" method="POST">
