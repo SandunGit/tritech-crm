@@ -22,11 +22,14 @@
     <!-- Main Content Start -->
     <div class="main-content">
         <?php
-            $id=$_GET['id'];
+            $id = intval($_GET['id']);
 
-            $sql = "SELECT * FROM tbl_lead WHERE id=$id";
+            $sql = "SELECT * FROM tbl_lead WHERE id = ?";
 
-            $res = mysqli_query($conn, $sql);
+            $stmt = mysqli_prepare($conn, $sql);
+            mysqli_stmt_bind_param($stmt, "i", $id);
+            mysqli_stmt_execute($stmt);
+            $res = mysqli_stmt_get_result($stmt);
 
             if($res==TRUE)
             {
@@ -49,8 +52,8 @@
                     header('location: http://localhost/tritech-crm/user-home/manage-lead.php');
                 }                 
             }  
-            ?>
-
+            mysqli_stmt_close($stmt);
+?>
 
         <form action="" method="POST">
         <table class="table-form">
