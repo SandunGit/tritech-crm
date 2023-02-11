@@ -25,32 +25,26 @@
     <div class="main-content">
     <div class="alert-header">
         <?php
-            $id=$_GET['id'];
+    $id = $_GET['id'];
+    $stmt = mysqli_prepare($conn, "SELECT * FROM tbl_admin WHERE id = ?");
+    mysqli_stmt_bind_param($stmt, "i", $id);
+    mysqli_stmt_execute($stmt);
+    $res = mysqli_stmt_get_result($stmt);
 
-            $sql = "SELECT * FROM tbl_admin WHERE id=$id";
+    if ($res) {
+        $count = mysqli_num_rows($res);
+        if ($count == 1) {
+            $row = mysqli_fetch_assoc($res);
+            $full_name = $row ['full_name'];
+            $username = $row ['username'];
+            $user_email = $row ['user_email'];
+            $user_type = $row ['user_type'];
+        } else {
+            header('location: http://localhost/tritech-crm/manage-admin/manage-admin.php');
+        }
+    }
+?>
 
-            $res = mysqli_query($conn, $sql);
-
-            if($res==TRUE)
-            {
-                $count = mysqli_num_rows($res);
-                if($count==1)
-                {
-                    $row=mysqli_fetch_assoc($res);
-
-                    $full_name = $row ['full_name'];
-                    $username = $row ['username'];
-                    $user_email = $row ['user_email'];
-                    $user_type = $row ['user_type'];
-                }   
-                else
-                {
-                    header('location: http://localhost/tritech-crm/manage-admin/manage-admin.php');
-                }                 
-            } 
-            
-            
-        ?>
     </div>
 
 
