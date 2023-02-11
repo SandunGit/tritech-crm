@@ -48,20 +48,20 @@
     </div>
 
 
-        <form action="" method="POST">
+<form action="" method="POST">
         <table class="table-form">
             <tr>
                 <td>Full Name: </td>
-                <td><input type="text" name="full_name" value="<?php echo $full_name; ?>" required></td>
+                <td><input type="text" name="full_name" value="<?php echo htmlspecialchars($full_name); ?>" required></td>
 
             </tr>
             <tr>
                 <td>Username: </td> 
-                <td><input type="text" name="username" value="<?php echo $username; ?>" required></td>          
+                <td><input type="text" name="username" value="<?php echo htmlspecialchars($username); ?>" required></td>          
             </tr>
             <tr>
                 <td>Email: </td>
-                <td><input type="text" name="user_email" value="<?php echo $user_email; ?>" required></td>
+                <td><input type="text" name="user_email" value="<?php echo htmlspecialchars($user_email); ?>" required></td>
             </tr>
             <tr>
                 <td>User Type: </td>
@@ -75,13 +75,14 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    <input type="hidden" name="id" value="<?php echo $id; ?>" >
+                    <input type="hidden" name="id" value="<?php echo htmlspecialchars($id); ?>" >
                     <input type="submit" name="submit" value="Update User" class="btn-form">
                 </td>
             </tr>
         </table>
 
         </form>
+
     </div>
     <!-- Main Content End -->
 
