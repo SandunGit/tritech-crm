@@ -22,32 +22,33 @@
         </div>
     </div>
         <div class="main-content">
-        <?php
-            $id=$_GET['id'];
+<?php
 
-            $sql = "SELECT * FROM tbl_campaign WHERE id=$id";
+$id = $_GET['id'];
+$stmt = mysqli_prepare($conn, "SELECT * FROM tbl_campaign WHERE id = ?");
+mysqli_stmt_bind_param($stmt, "i", $id);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
 
-            $res = mysqli_query($conn, $sql);
+if ($result) {
+    $count = mysqli_num_rows($result);
+    if ($count == 1) {
+        $row = mysqli_fetch_assoc($result);
+        
+        $camp_name = $row['camp_name'];
+        $budget = $row['budget'];
+        $type = $row['type'];
+        $start_date = $row['start_date'];
+        $end_date = $row['end_date'];  
+    } else {
+        header('location: http://localhost/tritech-crm/manage-campaign/manage-campaign.php');
+    }
+}
 
-            if($res==TRUE)
-            {
-                $count = mysqli_num_rows($res);
-                if($count==1)
-                {   
-                    $row=mysqli_fetch_assoc($res);
-                    
-                    $camp_name = $row['camp_name'];
-                    $budget = $row['budget'];
-                    $type = $row['type'];
-                    $start_date = $row['start_date'];
-                    $end_date = $row['end_date'];  
-                }   
-                else
-                {
-                    header('location: http://localhost/tritech-crm/manage-campaign/manage-campaign.php');
-                }                 
-            }      
-        ?>
+mysqli_stmt_close($stmt);
+
+?>
+
 
 
         <form action="" method="POST">
