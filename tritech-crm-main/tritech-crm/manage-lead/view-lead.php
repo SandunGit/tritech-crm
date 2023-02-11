@@ -50,46 +50,41 @@ if ($result) {
 ?>
 
 
-
 <div class="lead-view">
-            <div class="lead-container">
-                <p class="lead-header">Lead ID: </p>
-                <p> <?php echo $id; ?></p>
-        </div>
-            <div class="lead-container">
-                <p class="lead-header">Lead Name: </p>
-                <p> <?php echo $full_name; ?></p>
-
-            </div>
-            <div class="lead-container">
-                <p class="lead-header">Contact: </p>
-                <p> <?php echo $contact; ?></p>
-            </div>
-            <div class="lead-container">
-                <p class="lead-header">Email: </p>
-                <p> <?php echo $email; ?></p>
-            </div>
-           
-            <div class="lead-container">
-                <p class="lead-header">Date: </p>
-                <p> <?php echo $date; ?></p>
-            </div>
-            <div class="lead-container">
-                <p class="lead-header">Status:  </p>
-                <p> <?php echo $status; ?> </p>
-            </div>
-            <div class="lead-container">
-                <p class="lead-header">Campaign ID:  </p>
-                <p><?php echo $campaign_id; ?> </p>
-               
-            </div>
-            <div class="lead-container">
-                <p class="lead-header">Source:  </p>
-                <p><?php echo $source; ?></p> 
-            </div>
-        </div>
-
+    <div class="lead-container">
+        <p class="lead-header">Lead ID: </p>
+        <p> <?php echo htmlspecialchars($id, ENT_QUOTES, 'UTF-8'); ?></p>
     </div>
+    <div class="lead-container">
+        <p class="lead-header">Lead Name: </p>
+        <p> <?php echo htmlspecialchars($full_name, ENT_QUOTES, 'UTF-8'); ?></p>
+    </div>
+    <div class="lead-container">
+        <p class="lead-header">Contact: </p>
+        <p> <?php echo htmlspecialchars($contact, ENT_QUOTES, 'UTF-8'); ?></p>
+    </div>
+    <div class="lead-container">
+        <p class="lead-header">Email: </p>
+        <p> <?php echo htmlspecialchars($email, ENT_QUOTES, 'UTF-8'); ?></p>
+    </div>
+    <div class="lead-container">
+        <p class="lead-header">Date: </p>
+        <p> <?php echo htmlspecialchars($date, ENT_QUOTES, 'UTF-8'); ?></p>
+    </div>
+    <div class="lead-container">
+        <p class="lead-header">Status:  </p>
+        <p> <?php echo htmlspecialchars($status, ENT_QUOTES, 'UTF-8'); ?> </p>
+    </div>
+    <div class="lead-container">
+        <p class="lead-header">Campaign ID:  </p>
+        <p><?php echo htmlspecialchars($campaign_id, ENT_QUOTES, 'UTF-8'); ?> </p>
+    </div>
+    <div class="lead-container">
+        <p class="lead-header">Source:  </p>
+        <p><?php echo htmlspecialchars($source, ENT_QUOTES, 'UTF-8'); ?></p> 
+    </div>
+</div>
+
     <!-- Main Content End -->
 
 <?php include('../common/footer.php'); ?>
