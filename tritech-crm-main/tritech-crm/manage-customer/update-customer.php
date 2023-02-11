@@ -22,34 +22,25 @@
         </div>
     </div>
         <div class="main-content">
-        <?php
-            $id=$_GET['id'];
+ <?php
+    $id = mysqli_real_escape_string($conn, $_GET['id']);
+    $sql = "SELECT * FROM tbl_customer WHERE id = '".$id."'";
+    $res = mysqli_query($conn, $sql);
+    if($res){
+        $count = mysqli_num_rows($res);
+        if($count==1){
+            $row = mysqli_fetch_assoc($res);
+            $full_name = $row['full_name'];
+            $contact = $row['contact'];
+            $email = $row['email'];
+            $reg_date = $row['reg_date'];
+            $address = $row['address'];
+        }else{
+            header('location: http://localhost/tritech-crm/manage-customer/manage-customer.php');
+        }
+    }
+?>
 
-            $sql = "SELECT * FROM tbl_customer WHERE id=$id";
-
-            $res = mysqli_query($conn, $sql);
-
-            if($res==TRUE)
-            {
-                $count = mysqli_num_rows($res);
-                if($count==1)
-                {
-                    $row=mysqli_fetch_assoc($res);
-
-                    $full_name = $row['full_name'];
-                    $contact = $row['contact'];
-                    $email = $row['email'];
-                    $reg_date=$row['reg_date'];
-                    $address=$row['address'];
-                }   
-                else
-                {
-                    header('location: http://localhost/tritech-crm/manage-customer/manage-customer.php');
-                }                 
-            } 
-            
-            
-        ?>
 
 
         <form action="" method="POST">
