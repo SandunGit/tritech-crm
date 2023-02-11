@@ -60,17 +60,16 @@
     </div>
     <!-- Content End -->
 
-    <?php 
+<?php 
 
 if(isset($_POST['submit']))
 {
+    $id = mysqli_real_escape_string($conn, $_POST['id']);
+    $current_password = md5(mysqli_real_escape_string($conn, $_POST['current_password']));
+    $new_password = md5(mysqli_real_escape_string($conn, $_POST['new_password']));
+    $confirm_password = md5(mysqli_real_escape_string($conn, $_POST['confirm_password']));
 
-    $id=$_POST['id'];
-    $current_password = md5($_POST['current_password']);
-    $new_password = md5($_POST['new_password']);
-    $confirm_password = md5($_POST['confirm_password']);
-
-    $sql = "SELECT * FROM tbl_admin WHERE id=$id AND password='$current_password'";
+    $sql = "SELECT * FROM tbl_admin WHERE id='$id' AND password='$current_password'";
     $res = mysqli_query($conn, $sql);
 
     if($res==true)
@@ -84,7 +83,7 @@ if(isset($_POST['submit']))
             {
                 $sql2 = "UPDATE tbl_admin SET 
                     password='$new_password' 
-                    WHERE id=$id
+                    WHERE id='$id'
                 ";
 
                 $res2 = mysqli_query($conn, $sql2);
@@ -123,6 +122,7 @@ if(isset($_POST['submit']))
 }
 
 ?>
+
 
 
 
