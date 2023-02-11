@@ -49,27 +49,25 @@ mysqli_stmt_close($stmt);
 
 ?>
 
-
-
-        <form action="" method="POST">
+<form action="" method="POST">
         <table class="table-form">
             <tr>
                 <td>Campaign Title </td>
-                <td><input type="text" name="camp_name" value="<?php echo $camp_name; ?>" required></td>
+                <td><input type="text" name="camp_name" value="<?php echo htmlspecialchars($camp_name); ?>" required></td>
 
             </tr>
             <tr>
                 <td>Start Date</td>
-                <td><input type="date" name="start_date" value="<?php echo $start_date; ?>" required></td>
+                <td><input type="date" name="start_date" value="<?php echo htmlspecialchars($start_date); ?>" required></td>
             </tr>
             <tr>
                 <td>End Date</td>
-                <td><input type="date" name="end_date" value="<?php echo $end_date; ?>" required></td>
+                <td><input type="date" name="end_date" value="<?php echo htmlspecialchars($end_date); ?>" required></td>
             </tr>
            
             <tr>
                 <td>Budget: (Rs) </td>
-                <td><input type="number" name="budget" value="<?php echo $budget; ?>" required></td>
+                <td><input type="number" name="budget" value="<?php echo htmlspecialchars($budget); ?>" required></td>
             </tr>
             <tr>
                 <td>Type: </td>
@@ -86,13 +84,16 @@ mysqli_stmt_close($stmt);
             </tr>
             <tr>
                 <td colspan="2">
-                    <input type="hidden" name="id" value="<?php echo $id; ?>" >
+                    <input type="hidden" name="id" value="<?php echo htmlspecialchars($id); ?>" >
                     <input type="submit" name="submit" value="Update Campaign" class="btn-form">
                 </td>
             </tr>
         </table>
 
         </form>
+
+
+        
 
     </div>
     <!-- Main Content End -->
