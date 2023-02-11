@@ -64,67 +64,57 @@
 
 <?php 
 
-    if(isset($_POST['submit'])) //whether the submit value is passed
+   if(isset($_POST['submit']))
+{
+    $full_name = $_POST['full_name'];
+    $username = $_POST['username'];
+    $user_email = $_POST['user_email'];
+    $password = md5($_POST['password']);
+    $user_type = $_POST['user_type'];       
+
+    $sql1 = "SELECT * FROM tbl_admin WHERE username = ?"; 
+    $stmt = mysqli_prepare($conn, $sql1);
+    mysqli_stmt_bind_param($stmt, "s", $username);
+    mysqli_stmt_execute($stmt);
+    $res1 = mysqli_stmt_get_result($stmt);
+
+    if ($res1)
     {
-        $full_name = $_POST['full_name']; //Get Values from form
-        $username = $_POST['username'];
-        $user_email = $_POST['user_email'];
-        $password = md5($_POST['password']); //md5 = Password Encryption - One Way Encryption
-        $user_type = $_POST['user_type'];       
+        $count = mysqli_num_rows($res1);
 
-        $sql1 = " SELECT * FROM tbl_admin WHERE username = '$username'
-        "; 
-
-        $res1 = mysqli_query($conn, $sql1) or die(mysqli_error($conn)); //execute query
-
-        if($res1==TRUE)
+        if($count == 1)
         {
+            $_SESSION['add'] = "<div class='alert-failed'>Entered Username Already Exists. Please Try again</div> ";
+            header('location: http://localhost/tritech-crm/manage-admin/manage-admin.php'); 
+            echo "<script>window.location.href='http://localhost/tritech-crm/manage-admin/manage-admin.php'; </script>"; 
+        }
+        else
+        {
+            $sql = "INSERT INTO tbl_admin (full_name, username, password, user_email, user_type) VALUES (?, ?, ?, ?, ?)";
+            $stmt = mysqli_prepare($conn, $sql);
+            mysqli_stmt_bind_param($stmt, "sssss", $full_name, $username, $password, $user_email, $user_type);
+            $res = mysqli_stmt_execute($stmt);
 
-            $count=mysqli_num_rows($res1);
-
-            if($count==1)
+            if($res)
             {
-
-                $_SESSION['add'] = "<div class='alert-failed'>Entered Username Already Exists. Please Try again</div> ";
-                header('location: http://localhost/tritech-crm/manage-admin/manage-admin.php'); 
+                $_SESSION['add'] = "<div class='alert-success'> User Account Successfully Added </div>";
+                header('location: http://localhost/tritech-crm/manage-admin/manage-admin.php');
                 echo "<script>window.location.href='http://localhost/tritech-crm/manage-admin/manage-admin.php'; </script>"; 
             }
             else
             {
-                    $sql = "INSERT INTO tbl_admin SET
-                    full_name = '$full_name',
-                    username = '$username',
-                    password = '$password',
-                    user_email= '$user_email',
-                    user_type='$user_type'
-                ";
-                
-                $res = mysqli_query($conn, $sql) or die(mysqli_error($conn)); //execute query
-
-                if($res==TRUE)
-                {
-                    $_SESSION['add'] = "<div class='alert-success'> User Account Successfully Added </div>";
-                    header('location: http://localhost/tritech-crm/manage-admin/manage-admin.php');
-                    echo "<script>window.location.href='http://localhost/tritech-crm/manage-admin/manage-admin.php'; </script>"; 
-                }
-                else
-                {
-                    $_SESSION['add'] = "<div class='alert-failed'>Failed to Add User </div> ";
-                    header('location: http://localhost/tritech-crm/manage-admin/manage-admin.php');
-                    echo "<script>window.location.href='http://localhost/tritech-crm/manage-admin/manage-admin.php'; </script>";
- 
-                } 
-            }  
-        }
-        else
-        {
-            $_SESSION['add'] = "<div class='alert-failed'>Failed to Add User </div> ";
-            header('location: http://localhost/tritech-crm/manage-admin/manage-admin.php');
-            echo "<script>window.location.href='http://localhost/tritech-crm/manage-admin/manage-admin.php'; </script>";
-        }
-
-
+                $_SESSION['add'] = "<div class='alert-failed'>Failed to Add User </div> ";
+                header('location: http://localhost/tritech-crm/manage-admin/manage-admin.php');
+                echo "<script>window.location.href='http://localhost/tritech-crm/manage-admin/manage-admin.php'; </script>";
+            } 
+        }  
     }
+    else
+    {
+        $_SESSION['add'] = "<div class='alert-failed'>Failed to Add User </div> ";
+        header('location: http://localhost/tritech-crm/manage-admin/manage-admin.php');
+        echo "<script>window.location.href='http://localhost/tritech
+
 
 
 ?>
