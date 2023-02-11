@@ -48,50 +48,54 @@
 if(isset($_POST['submit']))
 {
     $username = $_POST['username'];
-    $password = md5($_POST['password']);
+    $password = $_POST['password'];
 
-    $sql = "SELECT * FROM tbl_admin WHERE username=? AND password=?";
+    $sql = "SELECT * FROM tbl_admin WHERE username=?";
     $stmt = mysqli_prepare($conn, $sql);
-    mysqli_stmt_bind_param($stmt, "ss", $username, $password);
+    mysqli_stmt_bind_param($stmt, "s", $username);
     mysqli_stmt_execute($stmt);
     $res = mysqli_stmt_get_result($stmt);
-    $count = mysqli_num_rows($res);
     $row = mysqli_fetch_array($res);
-    if($count==1)
-    {   
-        if($row["user_type"]=="User")
-        {
-            $_SESSION['login'] = "<div class='top-login-alert'>Login Successful.</div>";
-            $_SESSION['user'] = $username;
-            $_SESSION ['full_name'] = $row['full_name'];
-            $_SESSION ['username'] = $row['username'];
-            header('location: http://localhost/tritech-crm/user-home/user-home.php');
-        }
-        elseif($row["user_type"]=="Admin")
-        {
-            $_SESSION['login'] = "<div class='top-login-alert'>Login Successful.</div>";
-            $_SESSION['user'] = $username;
+    if(!empty($row))
+    {
+        if(password_verify($password, $row['password']))
+        {   
+            if($row["user_type"]=="User")
+            {
+                $_SESSION['login'] = "<div class='top-login-alert'>Login Successful.</div>";
+                $_SESSION['user'] = $username;
+                $_SESSION ['full_name'] = $row['full_name'];
+                $_SESSION ['username'] = $row['username'];
+                header('location: http://localhost/tritech-crm/user-home/user-home.php');
+            }
+            elseif($row["user_type"]=="Admin")
+            {
+                $_SESSION['login'] = "<div class='top-login-alert'>Login Successful.</div>";
+                $_SESSION['user'] = $username;
 
-            $_SESSION ['full_name'] = $row['full_name'];
-            $_SESSION ['username'] = $row['username'];
-            header('location: http://localhost/tritech-crm/home.php');
+                $_SESSION ['full_name'] = $row['full_name'];
+                $_SESSION ['username'] = $row['username'];
+                header('location: http://localhost/tritech-crm/home.php');
+            }
+            else
+            {
+                $_SESSION['login'] = "<div class='login-alert-failed text-center'>Whoops! Username or Password is incorrect.</div>";
+                header('location: http://localhost/tritech-crm/');
+            }
         }
         else
         {
-            $_SESSION['login'] = "<div class='login-alert-failed text-center'>Whoops! Username or Password is incorrect.</div>";
+            $_SESSION['login'] = "<div class='login-alert-failed text-center'>Whoops! Password did not match.</div>";
             header('location: http://localhost/tritech-crm/');
         }
-
     }
-
-
     else
     {
-        $_SESSION['login'] = "<div class='login-alert-failed text-center'>Whoops! Username or Password did not match.</div>";
+        $_SESSION['login'] = "<div class='login-alert-failed text-center'>Whoops! Username did not match.</div>";
         header('location: http://localhost/tritech-crm/');
-        
     }
 }
+
 
 
 ?> 
