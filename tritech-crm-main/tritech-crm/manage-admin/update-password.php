@@ -34,29 +34,28 @@
     </div>
 
         <form action="" method="POST">
-        <table class="table-form">
-            <tr>
-                <td>Current Password: </td>
-                <td><input type="password" name="current_password" placeholder="Current Password"></td>
+  <table class="table-form">
+    <tr>
+      <td>Current Password: </td>
+      <td><input type="password" name="current_password" placeholder="Current Password"></td>
+    </tr>
+    <tr>
+      <td>New Password:  </td> 
+      <td><input type="password" name="new_password" placeholder="New Password"></td>          
+    </tr>
+    <tr>
+      <td>Confirm Password:  </td>
+      <td><input type="password" name="confirm_password" placeholder="Old Password"></td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <input type="hidden" name="id" value="<?php echo htmlentities($id); ?>" >
+        <input type="submit" name="submit" value="Change Password" class="btn-form">
+      </td>
+    </tr>
+  </table>
+</form>
 
-            </tr>
-            <tr>
-                <td>New Password:  </td> 
-                <td><input type="password" name="new_password" placeholder="New Password"></td>          
-            </tr>
-            <tr>
-                <td>Confirm Password:  </td>
-                <td><input type="password" name="confirm_password" placeholder="Old Password"></td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <input type="hidden" name="id" value="<?php echo $id; ?>" >
-                    <input type="submit" name="submit" value="Change Password" class="btn-form">
-                </td>
-            </tr>
-        </table>
-
-        </form>
     </div>
     <!-- Content End -->
 
