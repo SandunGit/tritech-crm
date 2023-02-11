@@ -85,40 +85,34 @@
     </div>
     <!-- Main Content End -->
 
-    <?php
+<?php
+    if(isset($_POST['submit'])){
+        $id = mysqli_real_escape_string($conn, $_POST['id']);
+        $full_name = mysqli_real_escape_string($conn, $_POST['full_name']);
+        $username = mysqli_real_escape_string($conn, $_POST['username']);
+        $user_email = mysqli_real_escape_string($conn, $_POST['user_email']);
+        $user_type = mysqli_real_escape_string($conn, $_POST['user_type']);
 
-        if(isset($_POST['submit']))
-        {
-            $id = $_POST['id'];
-            $full_name = $_POST['full_name'];
-            $username = $_POST['username'];
-            $user_email=$_POST['user_email'];
-            $user_type=$_POST['user_type'];
+        $sql = "UPDATE tbl_admin SET
+                full_name = '$full_name',
+                username = '$username',
+                user_email = '$user_email',
+                user_type = '$user_type'
+                WHERE id = '$id'
+                ";
 
-            $sql = "UPDATE tbl_admin SET
-            full_name = '$full_name',
-            username = '$username',
-            user_email = '$user_email',
-            user_type = '$user_type'
-            WHERE id = '$id'
-            ";
-
-            $res = mysqli_query($conn,$sql);
-            if($res == TRUE)
-            {
-                $_SESSION ['update'] = "<div class='alert-success'>User Account Updated Successfully</div>";
-                header('location: http://localhost/tritech-crm/manage-admin/manage-admin.php');
-            }
-            else
-            {
-                $_SESSION['update'] = "<div class='alert-failed'>Failed to Update User Account </div> ";
-                header('location: http://localhost/tritech-crm/manage-admin/manage-admin.php'); 
-            }
-
-
+        $res = mysqli_query($conn,$sql);
+        if($res){
+            $_SESSION['update'] = "<div class='alert-success'>User Account Updated Successfully</div>";
+            header('location: http://localhost/tritech-crm/manage-admin/manage-admin.php');
+        } else {
+            $_SESSION['update'] = "<div class='alert-failed'>Failed to Update User Account </div> ";
+            header('location: http://localhost/tritech-crm/manage-admin/manage-admin.php');
         }
+    }
+?>
 
-    ?>
+
 
 <?php include('../common/footer.php'); ?> 
 
