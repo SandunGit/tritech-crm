@@ -21,35 +21,36 @@
     </div>
     <!-- Main Content Start -->
     <div class="main-content">
-        <?php
-            $id=$_GET['id'];
+      <?php
+$id = mysqli_real_escape_string($_GET['id']);
 
-            $sql = "SELECT * FROM tbl_lead WHERE id=$id";
+$sql = "SELECT * FROM tbl_lead WHERE id=?";
 
-            $res = mysqli_query($conn, $sql);
+$stmt = mysqli_prepare($conn, $sql);
+mysqli_stmt_bind_param($stmt, "i", $id);
+mysqli_stmt_execute($stmt);
 
-            if($res==TRUE)
-            {
-                $count = mysqli_num_rows($res);
-                if($count==1)
-                {   
-                    $rows=mysqli_fetch_assoc($res);
-                    
-                    $id=$rows['id'];
-                    $full_name=$rows['full_name'];
-                    $contact=$rows['contact'];
-                    $status=$rows['status'];
-                    $email=$rows['email'];
-                    $campaign_id=$rows['campaign_id'];
-                    $source=$rows['source'];
-                    $date=$rows['date'];
-                }   
-                else
-                {
-                    header('location: http://localhost/divitech-crm/user-home/manage-lead.php');
-                }                 
-            }  
-            ?>
+$res = mysqli_stmt_get_result($stmt);
+
+if ($res) {
+  $count = mysqli_num_rows($res);
+  if ($count == 1) {
+    $rows = mysqli_fetch_assoc($res);
+
+    $id = $rows['id'];
+    $full_name = $rows['full_name'];
+    $contact = $rows['contact'];
+    $status = $rows['status'];
+    $email = $rows['email'];
+    $campaign_id = $rows['campaign_id'];
+    $source = $rows['source'];
+    $date = $rows['date'];
+  } else {
+    header('location: http://localhost/divitech-crm/user-home/manage-lead.php');
+  }
+}
+?>
+
 
 
         <div class="lead-view">
