@@ -97,47 +97,37 @@ mysqli_stmt_close($stmt);
     </div>
     <!-- Main Content End -->
 
-    <?php
+<?php
+    if (isset($_POST['submit'])) {
+        // Get All the Values from Form
+        $id = mysqli_real_escape_string($conn, $_POST['id']);
+        $camp_name = mysqli_real_escape_string($conn, $_POST['camp_name']);
+        $start_date = date('y-m-d', strtotime($_POST['start_date']));
+        $end_date = date('y-m-d', strtotime($_POST['end_date']));
+        $budget = mysqli_real_escape_string($conn, $_POST['budget']);
+        $type = mysqli_real_escape_string($conn, $_POST['type']);
 
-        if(isset($_POST['submit']))
-        {
-            //Get All the Values from Form
-            $id = $_POST['id'];
-            $camp_name = $_POST['camp_name'];
-            $start_date = date('y-m-d',strtotime($_POST['start_date']));
-            $end_date = date('y-m-d',strtotime($_POST['end_date']));
-            $budget = $_POST['budget'];
-            $type = $_POST['type'];
-
-
-            //Update the Values
-            $sql2 = "UPDATE tbl_campaign SET
+        // Update the Values
+        $sql2 = "UPDATE tbl_campaign SET
             camp_name = '$camp_name',
             start_date = '$start_date',
             end_date = '$end_date',
-            budget= $budget,
-            type='$type'
+            budget = $budget,
+            type = '$type'
+            WHERE id = $id";
 
-            WHERE id=$id
-            ";
+        $res2 = mysqli_query($conn, $sql2);
 
-            $res2 = mysqli_query($conn,$sql2);
-
-            if($res2 == TRUE)
-            {
-                $_SESSION ['update'] = "<div class='alert-success'>Campaign Updated Successfully</div>";
-                header('location: http://localhost/tritech-crm/manage-campaign/manage-campaign.php');
-            }
-            else
-            {
-                $_SESSION['update'] = "<div class='alert-failed'>Failed to Update Campaign </div> ";
-                header('location: http://localhost/tritech-crm/manage-campaign/manage-campaign.php'); 
-            }
-
-
+        if ($res2 == TRUE) {
+            $_SESSION['update'] = "<div class='alert-success'>Campaign Updated Successfully</div>";
+            header('location: http://localhost/tritech-crm/manage-campaign/manage-campaign.php');
+        } else {
+            $_SESSION['update'] = "<div class='alert-failed'>Failed to Update Campaign </div>";
+            header('location: http://localhost/tritech-crm/manage-campaign/manage-campaign.php');
         }
+    }
+?>
 
-    ?>
 
 <?php include('../common/footer.php'); ?> 
 
